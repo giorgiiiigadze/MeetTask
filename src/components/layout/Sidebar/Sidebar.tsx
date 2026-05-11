@@ -7,34 +7,21 @@ import { useSidebar } from "./SidebarContext"
 import SidebarHeader from "./SidebarHeader"
 import SidebarItem from "./SidebarItem"
 
-import {
-    HomeIcon,
-    SearchIcon,
-    StarIcon,
-    CalendarIcon,
-    InboxIcon,
-} from "lucide-react"
-
-const SIDEBAR_WIDTH = 341
+const SIDEBAR_WIDTH = 300
 const TRIGGER_WIDTH = SIDEBAR_WIDTH / 5
 
-const NAV_ITEMS = [
-    { label: "Home", icon: <HomeIcon />, url: "/" },
-    { label: "Search", icon: <SearchIcon />, url: "/search" },
-    { label: "Inbox", icon: <InboxIcon />, url: "/inbox" },
-    { label: "Calendar", icon: <CalendarIcon />, url: "/calendar" },
-    { label: "Favorites", icon: <StarIcon />, url: "/favorites" },
-]
+interface NavItem {
+    label: string
+    icon?: React.ReactNode
+    url: string
+}
 
-const LIBRARY_ITEMS = [
-    { label: "Documents", url: "/documents" },
-    { label: "Projects", url: "/projects" },
-    { label: "Profile", url: "/profile" },
-    { label: "Notifications", url: "/notifications" },
-    { label: "Settings", url: "/settings" },
-]
+interface SidebarProps {
+    navItems?: NavItem[]
+    libraryItems?: NavItem[]
+}
 
-export default function Sidebar() {
+export default function Sidebar({ navItems, libraryItems }: SidebarProps) {
     const { isOpen, isHovered } = useSidebar()
     const [isPeeking, setIsPeeking] = useState(false)
 
@@ -87,8 +74,7 @@ export default function Sidebar() {
                     className="fixed left-0 z-50"
                     style={{
                         width: TRIGGER_WIDTH,
-                        top: "8.5%",
-                        height: "90%",
+                        height: "100%",
                     }}
                     onMouseEnter={handleEnter}
                 />
@@ -122,17 +108,20 @@ export default function Sidebar() {
             >
                 <SidebarHeader />
 
-                <div className="flex flex-col gap-[2px]">
-                    {NAV_ITEMS.map((item) => (
-                        <SidebarItem key={item.url} {...item} />
-                    ))}
+                <div className="w-full flex flex-col overflow-y-auto">
+                    <div className="flex flex-col gap-[0.2px] mt-2">
+                        {navItems?.map((item) => (
+                            <SidebarItem key={item.url} {...item} />
+                        ))}
+                    </div>
+
+                    <div className="flex flex-col gap-[0.2px] pt-4">
+                        {libraryItems?.map((item) => (
+                            <SidebarItem key={item.url} {...item} />
+                        ))}
+                    </div>                    
                 </div>
 
-                <div className="flex flex-col gap-[2px] mt-4">
-                    {LIBRARY_ITEMS.map((item) => (
-                        <SidebarItem key={item.url} {...item} />
-                    ))}
-                </div>
             </aside>
         </>
     )

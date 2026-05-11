@@ -119,6 +119,7 @@
   --color-state-hover:   rgba(55, 53, 47, .04);
   --color-state-pressed: rgba(55, 53, 47, .1);
   --color-btn-hover-bg:  rgba(55, 53, 47, .06);
+  --color-btn-dark-hover-bg: #121212;
   --color-btn-press-bg:  rgba(55, 53, 47, .16);
 
   /* ── Calendar / Card ── */
@@ -274,6 +275,7 @@
   --color-state-hover:   rgba(255, 255, 255, .055);
   --color-state-pressed: rgba(255, 255, 255, .13);
   --color-btn-hover-bg:  rgba(255, 255, 255, .055);
+  --color-btn-dark-hover-bg: #121212;
   --color-btn-press-bg:  rgba(255, 255, 255, .094);
 
   --color-calendar-item-bg:       #2f2f2f;
@@ -445,7 +447,7 @@ body {
   color: var(--color-text-primary);
 }
 
-::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar { width: 4px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: var(--color-border-strong);
