@@ -1,18 +1,29 @@
 "use client"
 
-import { createClient } from "@/src/utils/supabase/client"
-import { Button } from "@/src/components/ui/Button"
 import { useEffect, useState } from "react"
+import { createClient } from "@/src/utils/supabase/client"
+
+import { Button } from "@/src/components/ui/Button"
+
 import { SiNotion, SiLinear } from "react-icons/si"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/Card"
+
 import { useLiveTranscription } from "@/src/hooks/useLiveTranscription"
+
+import { ConfirmDialog } from "@/src/components/ui/ConfrimDialog"
 
 export default function TestPage() {
     const [email, setEmail] = useState<string | null>(null)
     const [notionConnected, setNotionConnected] = useState(false)
     const [linearConnected, setLinearConnected] = useState(false)
     const [active, setActive] = useState(false)
-    
+
+    const [notionPages, setNotionPages] = useState<any[]>([])
+    const [pagesLoading, setPagesLoading] = useState(false)
+
     const { transcript, currentTurn, start, stop } = useLiveTranscription()
+
+    const [showConfirm, setShowConfirm] = useState(false)
 
     useEffect(() => {
         const supabase = createClient()
@@ -33,17 +44,12 @@ export default function TestPage() {
         })
     }, [])
 
-    const pushToNotion = async () => {
-        const res = await fetch('/api/integrations/notion/push', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                title: 'Test Page from MeetTask',
-                content: 'This page was created from MeetTask!',
-            }),
-        })
+    const fetchNotionPages = async () => {
+        setPagesLoading(true)
+        const res = await fetch('/api/integrations/notion/pages')
         const data = await res.json()
-        console.log('Notion response:', data)
+        setNotionPages(data.pages ?? [])
+        setPagesLoading(false)
     }
 
     const toggleTranscription = () => {
@@ -71,7 +77,7 @@ export default function TestPage() {
                     </div>
                     {notionConnected ? (
                         <div className="flex items-center gap-2">
-                            <Button size="sm" variant="secondary" onClick={pushToNotion}>
+                            <Button size="sm" variant="secondary">
                                 Test Push
                             </Button>
                             <span className="text-xs px-2 py-1 rounded-md bg-[var(--color-green-50)] text-[var(--color-green-600)]">Connected</span>
@@ -103,6 +109,50 @@ export default function TestPage() {
                 </div>
             </div>
 
+            <div className="space-y-3">
+
+                <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted uppercase tracking-widest">Notion Pages</p>
+                    <Button size="sm" variant="secondary" onClick={fetchNotionPages} disabled={pagesLoading}>
+                        {pagesLoading ? "Loading..." : "Fetch Pages"}
+                    </Button>
+                </div>
+
+                {notionPages.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                        {notionPages.map((page: any) => {
+                            const title =
+                                page.properties?.title?.title?.[0]?.plain_text ||
+                                page.properties?.Name?.title?.[0]?.plain_text ||
+                                "Untitled"
+
+                            return (
+                                <a
+                                    key={page.id}
+                                    href={page.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 p-3 rounded-lg border border-[var(--color-border-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors"
+                                >
+                                    <SiNotion className="shrink-0 text-[var(--color-text-tertiary)]" />
+                                    <span className="text-sm text-[var(--color-text-primary)] truncate">{title}</span>
+                                    <span className="ml-auto text-xs text-[var(--color-text-tertiary)] shrink-0">
+                                        {new Date(page.last_edited_time).toLocaleDateString()}
+                                    </span>
+                                </a>
+                            )
+                        })}
+                    </div>
+                )}
+
+                {!pagesLoading && notionPages.length === 0 && (
+                    <p className="text-xs text-[var(--color-text-tertiary)]">
+                        Click "Fetch Pages" to load your Notion pages.
+                    </p>
+                )}
+
+            </div>
+
             <div className="flex flex-col gap-4 items-start justify-between w-auto">
                 <a href="/api/integrations/notion/auth">
                     <Button className="h-12 px-6 border-[0.5px] border-border">
@@ -118,6 +168,17 @@ export default function TestPage() {
                     </Button>
                 </a>
             </div>
+
+            <Card padding="lg" hover>
+                <CardHeader border>
+                    <CardTitle description="Updated just now">Active Tasks</CardTitle>
+                    <Button variant="ghost" size="sm">View all</Button>
+                </CardHeader>
+                <CardContent>...</CardContent>
+                <CardFooter border>
+                    <span className="text-xs text-[var(--color-text-tertiary)]">12 total</span>
+                </CardFooter>
+            </Card>
 
             <div className="space-y-3">
                 <p className="text-xs text-muted uppercase tracking-widest">Live Transcription</p>
@@ -155,9 +216,19 @@ export default function TestPage() {
                 <p className="font-serif font-normal italic">Italic — The quick brown fox</p>
             </div>
 
-            <Button size="md" onClick={() => console.log("Clicked")}>
-                Test button fr fr
+            <Button size="sm" variant="secondary" onClick={() => setShowConfirm(true)}>
+                Test Dialog
             </Button>
+
+            <ConfirmDialog
+                open={showConfirm}
+                title="Disconnect Notion?"
+                description="This will remove access to your Notion workspace. You can reconnect at any time."
+                confirmLabel="Disconnect"
+                variant="danger"
+                onConfirm={() => { setShowConfirm(false) }}
+                onCancel={() => setShowConfirm(false)}
+            />
 
         </div>
     )

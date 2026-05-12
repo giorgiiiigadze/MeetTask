@@ -16,7 +16,7 @@ export default function SettingsSidebar() {
 
     return (
         <aside className="w-72 p-4">
-            <h1 className="text-2xl font-serif font-semibold mb-8 ml-4">
+            <h1 className="text-2xl font-serif font-semibold mb-8">
                 Settings
             </h1>
 

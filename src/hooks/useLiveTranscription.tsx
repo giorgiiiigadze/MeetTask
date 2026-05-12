@@ -10,6 +10,8 @@ export function useLiveTranscription() {
     const streamRef = useRef<MediaStream | null>(null)
 
     const start = async () => {
+        console.log("Transcription recording started")
+
         const { token } = await fetch("/api/assemblyai/token").then(r => r.json())
 
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -58,6 +60,8 @@ export function useLiveTranscription() {
     }
 
     const stop = async () => {
+        console.log("Transcription recording stopped")
+
         processorRef.current?.disconnect()
         contextRef.current?.close()
         streamRef.current?.getTracks().forEach(track => track.stop())
@@ -68,7 +72,8 @@ export function useLiveTranscription() {
         contextRef.current = null
         streamRef.current = null
 
-        setTranscript("")
+        // setTranscript("")
+        console.log(transcript)
         setCurrentTurn("")
     }
 

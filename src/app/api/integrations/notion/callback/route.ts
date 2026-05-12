@@ -34,10 +34,13 @@ export async function GET(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   await supabase.from('integrations').upsert({
-    user_id: user?.id,
-    provider: 'notion',
-    access_token: data.access_token,
-    workspace_id: data.workspace_id,
+      user_id: user?.id,
+      provider: 'notion',
+      access_token: data.access_token,
+      workspace_id: data.workspace_id,
+      workspace_name: data.workspace_name,
+      workspace_icon: data.workspace_icon?.url ?? null,
+      last_synced: new Date().toISOString(),
   })
 
   return NextResponse.redirect(new URL('/settings/integrations?success=notion', req.url))
