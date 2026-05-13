@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -24,13 +24,14 @@ import {
   PlugZap,
 } from "lucide-react"
 import { User } from "@supabase/supabase-js"
+
 import { createClient } from "@/lib/client"
 
 import { SiNotion } from "react-icons/si"
 
 import { ConfirmDialog } from "../../ui/ConfrimDialog"
 
-import { formatLastSynced } from "@/src/lib/format"
+import { formatLastSynced } from "@/lib/format"
 import { ConnectionBadge } from "../../ui/ConnectionBadge"
 
 interface NotionConnection {

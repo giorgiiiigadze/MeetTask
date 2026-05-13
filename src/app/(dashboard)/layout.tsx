@@ -4,6 +4,7 @@ import Header from "@/src/components/layout/Header/Header"
 import {
     HomeIcon, SearchIcon, StarIcon, CalendarIcon, InboxIcon, Trash, Settings
 } from "lucide-react"
+
 import { createClient } from "@/lib/server"
 
 const NAV_ITEMS = [

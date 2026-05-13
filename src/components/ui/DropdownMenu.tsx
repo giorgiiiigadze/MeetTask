@@ -238,10 +238,11 @@ export const DropdownMenuItem = ({
       className={`
         w-full flex items-center gap-2.5
         px-2.5 py-[5px] mx-1
-        text-sm text-left rounded-md
+        text-[14px] text-left rounded-md
         transition-colors duration-75
         cursor-pointer select-none
         disabled:opacity-40 disabled:cursor-not-allowed
+        capitalize
         ${colorClass}
         ${className}
       `}

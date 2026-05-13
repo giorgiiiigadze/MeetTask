@@ -4,16 +4,17 @@ import { StreamingTranscriber } from "assemblyai"
 export function useLiveTranscription() {
     const [transcript, setTranscript] = useState("")
     const [currentTurn, setCurrentTurn] = useState("")
+    const [saving, setSaving] = useState(false)
+
+    const transcriptRef = useRef("")
+
     const transcriberRef = useRef<StreamingTranscriber | null>(null)
     const processorRef = useRef<ScriptProcessorNode | null>(null)
     const contextRef = useRef<AudioContext | null>(null)
     const streamRef = useRef<MediaStream | null>(null)
 
     const start = async () => {
-        console.log("Transcription recording started")
-
         const { token } = await fetch("/api/assemblyai/token").then(r => r.json())
-
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
         streamRef.current = stream
 
@@ -27,14 +28,16 @@ export function useLiveTranscription() {
             if (!text) return
             setCurrentTurn(text)
             if (end_of_turn) {
-                setTranscript(prev => (prev + " " + text).trim())
+                setTranscript(prev => {
+                    const next = (prev + " " + text).trim()
+                    transcriptRef.current = next
+                    return next
+                })
                 setCurrentTurn("")
             }
         })
 
-        transcriber.on("error", (err) => {
-            console.error("AssemblyAI error:", err)
-        })
+        transcriber.on("error", (err) => console.error("AssemblyAI error:", err))
 
         await transcriber.connect()
 
@@ -60,11 +63,9 @@ export function useLiveTranscription() {
     }
 
     const stop = async () => {
-        console.log("Transcription recording stopped")
-
         processorRef.current?.disconnect()
         contextRef.current?.close()
-        streamRef.current?.getTracks().forEach(track => track.stop())
+        streamRef.current?.getTracks().forEach(t => t.stop())
         await transcriberRef.current?.close()
 
         transcriberRef.current = null
@@ -72,10 +73,33 @@ export function useLiveTranscription() {
         contextRef.current = null
         streamRef.current = null
 
-        // setTranscript("")
-        console.log(transcript)
         setCurrentTurn("")
+
+        const finalTranscript = transcriptRef.current
+        if (!finalTranscript) return
+
+        setSaving(true)
+
+        try {
+            const res = await fetch('/api/transcribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: finalTranscript, source: 'microphone' }),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                console.error("Failed to save transcript:", data)
+            } else {
+                console.log("Saved:", data)
+            }
+        } catch (err) {
+            console.error("Fetch error:", err)
+        } finally {
+            setSaving(false)
+        }
     }
 
-    return { transcript, currentTurn, start, stop }
+    return { transcript, currentTurn, saving, start, stop }
 }

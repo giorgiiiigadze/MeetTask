@@ -9,6 +9,7 @@ import SidebarHeader from "./SidebarHeader"
 import SidebarItem from "./SidebarItem"
 
 import { createClient } from "@/lib/client"
+
 import { User } from "@supabase/supabase-js"
 
 const SIDEBAR_WIDTH = 300

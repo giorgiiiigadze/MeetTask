@@ -2,8 +2,8 @@
 
 import { useCurrentUserImage } from '@/hooks/use-current-user-image'
 import { useCurrentUserName } from '@/hooks/use-current-user-name'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { cn } from '../utils/supabase/utils'
 
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 type AvatarRadius = 'none' | 'sm' | 'md' | 'lg' | 'full'

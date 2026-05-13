@@ -29,6 +29,7 @@ export default function SettingsSidebar() {
                                 rounded-[8px] px-4 h-9 w-full text-left
                                 font-sans transition cursor-pointer
                                 flex items-center
+                                text-[16px]
                                 hover:bg-[var(--color-btn-dark-hover-bg)]
                                 ${pathname === item.url
                                     ? "bg-[var(--color-btn-dark-hover-bg)]"

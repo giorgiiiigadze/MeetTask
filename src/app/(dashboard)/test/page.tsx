@@ -1,14 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/src/utils/supabase/client"
+import { createClient } from "@/lib/client"
 
 import { Button } from "@/src/components/ui/Button"
 
 import { SiNotion, SiLinear } from "react-icons/si"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/Card"
 
-import { useLiveTranscription } from "@/src/hooks/useLiveTranscription"
+import { useLiveTranscription } from "@/hooks/useLiveTranscription"
 
 import { ConfirmDialog } from "@/src/components/ui/ConfrimDialog"
 
@@ -21,7 +21,7 @@ export default function TestPage() {
     const [notionPages, setNotionPages] = useState<any[]>([])
     const [pagesLoading, setPagesLoading] = useState(false)
 
-    const { transcript, currentTurn, start, stop } = useLiveTranscription()
+    const { transcript, currentTurn, saving, start, stop } = useLiveTranscription()
 
     const [showConfirm, setShowConfirm] = useState(false)
 
@@ -182,7 +182,12 @@ export default function TestPage() {
 
             <div className="space-y-3">
                 <p className="text-xs text-muted uppercase tracking-widest">Live Transcription</p>
-                <Button size="sm" variant="secondary" onClick={toggleTranscription}>
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={toggleTranscription}
+                    disabled={saving}
+                >
                     {active ? "Stop" : "Start"} Transcription
                 </Button>
                 <div className="p-4 rounded-lg border border-[var(--color-border-primary)] min-h-[100px]">
@@ -191,6 +196,9 @@ export default function TestPage() {
                         {currentTurn && <span className="opacity-50"> {currentTurn}</span>}
                     </p>
                 </div>
+                {saving && (
+                    <p className="text-xs text-[var(--color-text-tertiary)]">Saving transcript...</p>
+                )}
             </div>
 
             <div className="space-y-2">

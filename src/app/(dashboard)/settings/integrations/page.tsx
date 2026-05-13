@@ -7,7 +7,7 @@ import { RefreshCw, PlugZap, Unplug } from "lucide-react"
 import { ConfirmDialog } from "@/src/components/ui/ConfrimDialog"
 import { Button } from "@/src/components/ui/Button"
 
-import { formatLastSynced } from "@/src/lib/format"
+import { formatLastSynced } from "@/lib/format"
 import { ConnectionBadge } from "@/src/components/ui/ConnectionBadge"
 
 interface Integration {
