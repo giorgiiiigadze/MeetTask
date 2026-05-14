@@ -123,7 +123,7 @@ export default function SidebarHeader({ user, loading, notion, onDisconnectNotio
 
   return (
     <>
-      <div className="px-1 py-1 w-full flex items-center justify-start gap-0.5">
+      <div className="px-1 py-1 w-full flex items-center justify-start gap-0.5 px-[8px]">
         <DropdownMenu>
           <DropdownMenuTrigger className="flex-1 min-w-0">
             <div className="

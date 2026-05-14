@@ -2,14 +2,15 @@ import { SidebarProvider } from "@/src/components/layout/Sidebar/SidebarContext"
 import Sidebar from "@/src/components/layout/Sidebar/Sidebar"
 import Header from "@/src/components/layout/Header/Header"
 import {
-    HomeIcon, SearchIcon, StarIcon, CalendarIcon, InboxIcon, Trash, Settings
+    HomeIcon, StarIcon, CalendarIcon, InboxIcon, Trash, Settings,
+    Plus
 } from "lucide-react"
 
 import { createClient } from "@/lib/server"
 
 const NAV_ITEMS = [
     { label: "Home", icon: <HomeIcon />, url: "/home" },
-    { label: "Search", icon: <SearchIcon />, url: "/search" },
+    { label: "New", icon: <Plus />, url: "/new" },
     { label: "Inbox", icon: <InboxIcon />, url: "/inbox" },
     { label: "Calendar", icon: <CalendarIcon />, url: "/calendar" },
     { label: "Favorites", icon: <StarIcon />, url: "/favorites" },

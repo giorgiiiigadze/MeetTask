@@ -12,6 +12,8 @@ import { useLiveTranscription } from "@/hooks/useLiveTranscription"
 
 import { ConfirmDialog } from "@/src/components/ui/ConfrimDialog"
 
+import DashboardContainer from "@/src/components/ui/DashboardContainer"
+
 export default function TestPage() {
     const [email, setEmail] = useState<string | null>(null)
     const [notionConnected, setNotionConnected] = useState(false)
@@ -58,7 +60,7 @@ export default function TestPage() {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 pb-[200px]">
 
             <p>{email}</p>
 
@@ -227,6 +229,8 @@ export default function TestPage() {
             <Button size="sm" variant="secondary" onClick={() => setShowConfirm(true)}>
                 Test Dialog
             </Button>
+
+            <DashboardContainer />
 
             <ConfirmDialog
                 open={showConfirm}

@@ -16,7 +16,7 @@ export default function SettingsSidebar() {
 
     return (
         <aside className="w-72 p-4">
-            <h1 className="text-2xl font-serif font-semibold mb-8">
+            <h1 className="text-2xl font-serif font-semibold mb-8 ml-4">
                 Settings
             </h1>
 
@@ -29,7 +29,7 @@ export default function SettingsSidebar() {
                                 rounded-[8px] px-4 h-9 w-full text-left
                                 font-sans transition cursor-pointer
                                 flex items-center
-                                text-[16px]
+                                text-[14px]
                                 hover:bg-[var(--color-btn-dark-hover-bg)]
                                 ${pathname === item.url
                                     ? "bg-[var(--color-btn-dark-hover-bg)]"

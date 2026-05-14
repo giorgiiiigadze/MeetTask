@@ -9,6 +9,7 @@ import SidebarHeader from "./SidebarHeader"
 import SidebarItem from "./SidebarItem"
 
 import { createClient } from "@/lib/client"
+import { fetchIntegrations, disconnectIntegration } from "@/lib/integrations"
 
 import { User } from "@supabase/supabase-js"
 
@@ -49,47 +50,26 @@ export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarP
     const [notion, setNotion] = useState<NotionConnection | undefined>()
 
     useEffect(() => {
-        const fetchData = async () => {
+        const load = async () => {
             const supabase = createClient()
             const { data: { user } } = await supabase.auth.getUser()
             setUser(user)
 
-            const { data } = await supabase
-                .from("integrations")
-                .select("*")
-                .eq("provider", "notion")
-                .maybeSingle()
-
-            if (data) {
-                const notionData: NotionConnection = {
-                    connected: data.connected === true || data.connected === 1 || data.connected === "true" || !!data.access_token,
-                    workspaceName: data.workspace_name,
-                    workspaceIcon: data.workspace_icon,
-                    lastSynced: data.last_synced ? new Date(data.last_synced) : undefined,
-                }
-                setNotion(notionData)
-
-                console.log("lastSynced raw:", data.last_synced)
-                console.log("lastSynced parsed:", notionData.lastSynced)
-            }
+            const integrations = await fetchIntegrations()
+            const notionRow = integrations.find(i => i.provider === "notion")
+            setNotion(notionRow ?? undefined)
 
             setUserLoading(false)
         }
-        fetchData()
+        load()
     }, [])
 
     const handleDisconnectNotion = async () => {
-        const supabase = createClient()
-        const { error } = await supabase
-            .from("integrations")
-            .delete()
-            .eq("provider", "notion")
-
-        if (error) {
-            console.error("Failed to disconnect Notion:", error)
+        const success = await disconnectIntegration("notion")
+        if (!success) {
+            console.error("Failed to disconnect Notion")
             return
         }
-
         setNotion(undefined)
     }
 
@@ -153,7 +133,7 @@ export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarP
                             borderRight: "0.5px solid var(--color-border)",
                         }),
                 }}
-                className="bg-[var(--color-bg-secondary)] border-r-[0.5px] border-border shrink-0 px-[8px] py-[4px] flex flex-col gap-[2px]"
+                className="bg-[var(--color-bg-secondary)] border-r-[0.5px] border-border shrink-0 py-[4px] flex flex-col gap-[2px]"
             >
                 <SidebarHeader
                     user={user ?? undefined}
@@ -162,27 +142,29 @@ export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarP
                     onDisconnectNotion={handleDisconnectNotion}
                 />
 
-                <div className="w-full flex flex-col overflow-y-auto">
-                    <div className="flex flex-col gap-[1px]">
-                        {navItems?.map((item) => (
-                            <SidebarItem key={item.url} {...item} active={isActive(item.url)} />
-                        ))}
-                    </div>
-
-                    <div className="flex flex-col gap-[1px] pt-4">
-                        {libraryItems?.map((item) => (
-                            <SidebarItem key={item.url} {...item} active={isActive(item.url)} onMore={() => {
-                                console.log("On More button clicked")
-                            }} />
-                        ))}
-                    </div>
-
-                    <div className="flex flex-col gap-[1px] pt-6">
-                        {extraItems?.map((item) => (
-                            <SidebarItem key={item.url} {...item} active={isActive(item.url)} />
-                        ))}
-                    </div>
+                <div className="w-full flex flex-col overflow-y-auto gap-4 px-[8px]">
+                    {[
+                        { items: navItems },
+                        { items: libraryItems, onMore: true },
+                        { items: extraItems },
+                    ].map((section, i) => (
+                        section.items?.length ? (
+                            <div key={i} className="flex flex-col gap-[1px]">
+                                {section.items.map((item) => (
+                                    <SidebarItem
+                                        key={item.url}
+                                        {...item}
+                                        active={isActive(item.url)}
+                                        {...(section.onMore && {
+                                            onMore: () => console.log("On More button clicked")
+                                        })}
+                                    />
+                                ))}
+                            </div>
+                        ) : null
+                    ))}
                 </div>
+                
             </aside>
         </>
     )

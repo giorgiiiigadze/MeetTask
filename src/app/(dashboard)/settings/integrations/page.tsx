@@ -9,6 +9,7 @@ import { Button } from "@/src/components/ui/Button"
 
 import { formatLastSynced } from "@/lib/format"
 import { ConnectionBadge } from "@/src/components/ui/ConnectionBadge"
+import { disconnectIntegration, fetchIntegrations } from "@/lib/integrations"
 
 interface Integration {
     provider: string
@@ -114,52 +115,26 @@ function IntegrationCard({ label, description, icon, state, authUrl, loading, on
 }
 
 export default function SettingsIntegrationsPage() {
+    const [loading, setLoading] = useState(true)
+    
     const [notion, setNotion] = useState<Integration | null>(null)
     const [linear, setLinear] = useState<Integration | null>(null)
-    const [loading, setLoading] = useState(true)
     const [showDisconnectConfirm, setShowDisconnectConfirm] = useState<string | null>(null)
 
     useEffect(() => {
-        const fetchIntegrations = async () => {
-            const supabase = createClient()
-            const { data } = await supabase.from("integrations").select("*")
-
-            const notionRow = data?.find(i => i.provider === "notion")
-            const linearRow = data?.find(i => i.provider === "linear")
-
-            setNotion(notionRow ? {
-                provider: "notion",
-                connected: !!notionRow.access_token,
-                workspaceName: notionRow.workspace_name,
-                workspaceIcon: notionRow.workspace_icon,
-                lastSynced: notionRow.last_synced ? new Date(notionRow.last_synced) : undefined,
-            } : null)
-
-            setLinear(linearRow ? {
-                provider: "linear",
-                connected: !!linearRow.access_token,
-            } : null)
-
+        const load = async () => {
+            const integrations = await fetchIntegrations()
+            const notionRow = integrations.find(i => i.provider === "notion")
+            setNotion(notionRow ?? null)
             setLoading(false)
         }
-
-        fetchIntegrations()
+        load()
     }, [])
 
     const handleDisconnect = async (provider: string) => {
-        const supabase = createClient()
-        const { error } = await supabase
-            .from("integrations")
-            .delete()
-            .eq("provider", provider)
-
-        if (error) {
-            console.error(`Failed to disconnect ${provider}:`, error)
-            return
-        }
-
+        const success = await disconnectIntegration(provider)
+        if (!success) return
         if (provider === "notion") setNotion(null)
-        if (provider === "linear") setLinear(null)
     }
 
     const integrations = [
