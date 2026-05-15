@@ -1,27 +1,11 @@
 import { NextResponse } from 'next/server'
 import { AssemblyAI } from 'assemblyai'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 const ACCEPTED = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/webm', 'audio/x-m4a', 'video/mp4', 'video/webm']
 
 export async function POST(request: Request) {
-  const cookieStore = await cookies()
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  const supabase = await createClient()
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
@@ -49,12 +33,12 @@ export async function POST(request: Request) {
   }
 
   const { data, error } = await supabase
-    .from('meetings')                          // ✅ correct table
+    .from('meetings')
     .insert({
       user_id: user.id,
       title,
-      audio_url: aaiTranscript.id,            // ✅ store AssemblyAI job ID here
-      status: 'processing',                   // ✅ valid status
+      audio_url: aaiTranscript.id,
+      status: 'processing',
     })
     .select('id')
     .single()

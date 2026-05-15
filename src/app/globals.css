@@ -122,7 +122,7 @@
   /* ── Interactive States ── */
   --color-state-hover:   rgba(55, 53, 47, .04);
   --color-state-pressed: rgba(55, 53, 47, .1);
-  --color-btn-hover-bg:  rgba(55, 53, 47, .06);
+  --color-btn-hover-bg:  #121212;
   --color-btn-dark-hover-bg: #121212;
   --color-btn-press-bg:  rgba(55, 53, 47, .16);
 
@@ -298,29 +298,29 @@
   --color-bg-tertiary:  #383836;
   --color-bg-element:   #202020;
 
-  --color-popup-bg:                 #252525;
-  --color-overlay:                  rgba(15, 15, 15, .8);
-  --color-sidebar-secondary:        #9b9b9b;
-  --color-sidebar-item-selected-bg: rgba(255, 255, 255, .055);
+  --color-popup-bg: #252525;
+  --color-overlay:rgba(15, 15, 15, .8);
+  --color-sidebar-secondary:#9b9b9b;
+  --color-sidebar-item-selected-bg:rgba(255, 255, 255, .055);
 
-  --color-state-hover:   rgba(255, 255, 255, .055);
+  --color-state-hover: rgba(255, 255, 255, .055);
   --color-state-pressed: rgba(255, 255, 255, .13);
-  --color-btn-hover-bg:  rgba(255, 255, 255, .055);
-  --color-btn-dark-hover-bg: #121212;
-  --color-btn-press-bg:  rgba(255, 255, 255, .094);
+  --color-btn-hover-bg:#121212;
+  --color-btn-dark-hover-bg:#121212;
+  --color-btn-press-bg:rgba(255, 255, 255, .094);
 
-  --color-calendar-item-bg:       #2f2f2f;
-  --color-calendar-item-hover-bg: #373737;
-  --color-card-hover-bg:          #2f2f2f;
+  --color-calendar-item-bg:#2f2f2f;
+  --color-calendar-item-hover-bg:#373737;
+  --color-card-hover-bg:#2f2f2f;
 
   --color-code-block-bg: rgba(255, 255, 255, .03);
 
-  --color-find-highlight-match:      #1c3651;
-  --color-find-highlight-unselected: #444137;
+  --color-find-highlight-match:#1c3651;
+  --color-find-highlight-unselected:#444137;
 
-  --color-favorites-star: #ca984d;
+  --color-favorites-star:#ca984d;
 
-  --shadow-focus:      rgba(35, 131, 226, .57) 0px 0px 0px 1px inset, rgba(35, 131, 226, .35) 0px 0px 0px 2px;
+  --shadow-focus:rgba(35, 131, 226, .57) 0px 0px 0px 1px inset, rgba(35, 131, 226, .35) 0px 0px 0px 2px;
   --shadow-focus-blue: 0px 0px 0px 2px #191919, 0px 0px 0px 4px #2383e2, 0px 0px 0px 6px #191919;
   --shadow-focus-red:  0px 0px 0px 1px #de5550 inset, 0px 0px 0px 1px #de5550;
   --shadow-sm:         0px 0px 0px 1px #383836, 0px 2px 4px 0px rgba(25, 25, 25, .08);
@@ -370,12 +370,12 @@
     --color-border-primary:   #383836;
     --color-border-secondary: #2c2c2b;
     --color-border-strong:    #5f5e59;
-    --color-bg-primary:   #191919;
-    --color-bg-secondary: #202020;
-    --color-bg-tertiary:  #383836;
-    --color-bg-element:   #202020;
-    --color-popup-bg:     #252525;
-    --color-overlay:      rgba(15, 15, 15, .8);
+    --color-bg-primary:#191919;
+    --color-bg-secondary:#202020;
+    --color-bg-tertiary: #383836;
+    --color-bg-element: #202020;
+    --color-popup-bg: #252525;
+    --color-overlay: rgba(15, 15, 15, .8);
     --color-sidebar-secondary: #9b9b9b;
     --color-sidebar-item-selected-bg: rgba(255, 255, 255, .055);
     --color-state-hover:   rgba(255, 255, 255, .055);

@@ -1,23 +1,12 @@
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ meetingId: string }> }
 ) {
-  const cookieStore = await cookies()
+  const supabase = await createClient()
   const { meetingId } = await params
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-      },
-    }
-  )
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
@@ -51,18 +40,8 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ meetingId: string }> }
 ) {
-  const cookieStore = await cookies()
+  const supabase = await createClient()
   const { meetingId } = await params
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-      },
-    }
-  )
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {

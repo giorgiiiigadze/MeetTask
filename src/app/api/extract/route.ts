@@ -1,5 +1,4 @@
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
@@ -8,20 +7,10 @@ import { SYSTEM_PROMPT } from '@/lib/prompt'
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function POST(request: Request) {
-  const cookieStore = await cookies()
+  const supabase = await createClient()
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-      },
-    }
-  )
-
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -82,7 +71,7 @@ export async function POST(request: Request) {
   }
 
   const rows = tasks.map((t) => ({
-    user_id: session.user.id,
+    user_id: user.id,
     meeting_id: meeting_id ?? null,
     title: t.title,
     assignee: t.assignee ?? null,

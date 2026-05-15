@@ -8,7 +8,7 @@ import { useSidebar } from "./SidebarContext"
 import SidebarHeader from "./SidebarHeader"
 import SidebarItem from "./SidebarItem"
 
-import { createClient } from "@/lib/client"
+import { createClient } from "@/lib/supabase/client"
 import { fetchIntegrations, disconnectIntegration } from "@/lib/integrations"
 
 import { User } from "@supabase/supabase-js"
@@ -138,7 +138,7 @@ export default function Sidebar({ user, navItems, libraryItems, extraItems }: Si
                     onDisconnectNotion={handleDisconnectNotion}
                 />
 
-                <div className="w-full flex flex-col overflow-y-auto gap-4 px-[8px]">
+                <div className="w-full flex flex-col overflow-y-auto gap-4 px-[8px] pt-2">
                     {[
                         { items: navItems },
                         { items: libraryItems, onMore: true, emptyState: true },

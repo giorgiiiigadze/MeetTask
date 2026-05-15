@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/client"
+import { createClient } from "@/lib/supabase/client"
 
 export type Integration = {
     provider: string

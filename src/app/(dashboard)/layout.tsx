@@ -4,11 +4,13 @@ import Header from "@/src/components/layout/Header/Header"
 import {
     HomeIcon, StarIcon, CalendarIcon, InboxIcon, Trash, Settings, Plus
 } from "lucide-react"
-import { createClient } from "@/lib/server"
+import { createClient } from "@/lib/supabase/server"
+import { FaMicrophone } from "react-icons/fa"
 
 const NAV_ITEMS = [
     { label: "Home", icon: <HomeIcon />, url: "/home"},
     { label: "New", icon: <Plus />, url: "/new"},
+    { label: "Record", icon: <FaMicrophone />, url: "/recording"},
     { label: "Inbox", icon: <InboxIcon />, url: "/inbox"},
     { label: "Calendar", icon: <CalendarIcon />, url: "/calendar"},
     { label: "Favorites", icon: <StarIcon />, url: "/favorites"},

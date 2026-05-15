@@ -1,25 +1,9 @@
 import { NextResponse } from 'next/server'
 import { AssemblyAI } from 'assemblyai'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET(request: Request) {
-  const cookieStore = await cookies()
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  const supabase = await createClient()
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) {
@@ -38,16 +22,15 @@ export async function GET(request: Request) {
     .single()
 
   if (fetchError || !row) {
-    console.error('Row not found:', { 
-      meetingId, 
-      userId: user.id, 
+    console.error('Row not found:', {
+      meetingId,
+      userId: user.id,
       fetchError: fetchError?.message,
       fetchErrorCode: fetchError?.code
     })
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  
   if (row.status === 'done' && row.transcript) {
     return NextResponse.json({ status: 'done', meetingId })
   }

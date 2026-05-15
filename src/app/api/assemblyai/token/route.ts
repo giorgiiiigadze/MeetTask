@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { AssemblyAI } from "assemblyai"
-import { createClient } from "@/lib/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET() {
     try {

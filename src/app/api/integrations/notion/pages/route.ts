@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { Client } from "@notionhq/client"
-import { createClient } from "@/lib/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET() {
     const supabase = await createClient()

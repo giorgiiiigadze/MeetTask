@@ -3,7 +3,7 @@ import { Providers } from "../components/theming/providers";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/supabase/utils";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
