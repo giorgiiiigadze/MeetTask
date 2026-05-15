@@ -20,9 +20,9 @@ type Meeting = {
 }
 
 const PRIORITY_CONFIG: Record<Priority, { label: string; color: string; bg: string }> = {
-  high:   { label: 'High',   color: 'var(--color-red-500)',    bg: 'rgba(239,68,68,0.08)'  },
-  medium: { label: 'Medium', color: 'var(--color-ui-blue-600)', bg: 'rgba(59,130,246,0.08)' },
-  low:    { label: 'Low',    color: 'var(--color-text-tertiary)', bg: 'var(--color-state-hover)' },
+  high: { label: 'High', color: 'var(--color-red-500)', bg: 'rgba(239,68,68,0.08)'},
+  medium: { label: 'Medium', color: 'var(--color-ui-blue-600)', bg: 'rgba(59,130,246,0.08)'},
+  low: { label: 'Low', color: 'var(--color-text-tertiary)', bg: 'var(--color-state-hover)'},
 }
 
 export default function ReviewPage() {
@@ -52,7 +52,7 @@ export default function ReviewPage() {
   }, [meetingId])
 
   async function toggleTask(id: string, current: string) {
-    const next = current === 'done' ? 'pending' : 'done'
+    const next = current === 'completed' ? 'pending' : 'completed'
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: next } : t))
     await fetch(`/api/review/${meetingId}`, {
       method: 'PATCH',
@@ -74,8 +74,6 @@ export default function ReviewPage() {
   )
 
   const done = tasks.filter(t => t.status === 'done').length
-
-  console.log(tasks)
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-8 flex flex-col gap-6">
@@ -134,7 +132,7 @@ export default function ReviewPage() {
         <div className="flex flex-col gap-2">
           {tasks.map(task => {
             const p = PRIORITY_CONFIG[task.priority] ?? PRIORITY_CONFIG.low
-            const isDone = task.status === 'done'
+            const isDone = task.status === 'completed'
             return (
               <div
                 key={task.id}
@@ -171,21 +169,21 @@ export default function ReviewPage() {
                     </p>
                   )}
                   <div className="flex items-center gap-3 mt-2 flex-wrap">
-                    {/* Priority badge */}
+
                     <span
                       className="text-xs font-medium px-2 py-0.5 rounded-md"
                       style={{ color: p.color, background: p.bg }}
                     >
                       {p.label}
                     </span>
-                    {/* Assignee */}
+
                     {task.assignee && (
                       <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                         <User size={11} />
                         {task.assignee}
                       </span>
                     )}
-                    {/* Due date */}
+
                     {task.due_date && (
                       <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                         <Clock size={11} />
@@ -200,7 +198,6 @@ export default function ReviewPage() {
         </div>
       )}
 
-      {/* Transcript */}
       {meeting?.transcript && (
         <details className="group">
           <summary

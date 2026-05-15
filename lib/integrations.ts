@@ -18,8 +18,6 @@ export async function fetchIntegrations(): Promise<Integration[]> {
         .select("*")
         .eq("user_id", user.id)
 
-    console.log("Testing fetch")
-
     return (data ?? []).map(row => ({
         provider: row.provider,
         connected: !!row.access_token,

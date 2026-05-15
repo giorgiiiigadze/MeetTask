@@ -52,7 +52,7 @@ export async function PATCH(
   { params }: { params: Promise<{ meetingId: string }> }
 ) {
   const cookieStore = await cookies()
-  await params
+  const { meetingId } = await params
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

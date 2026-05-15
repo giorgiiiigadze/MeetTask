@@ -13,7 +13,7 @@ interface SidebarItemProps {
 
 export default function SidebarItem({ label, icon, url, onClick, active, danger, onMore }: SidebarItemProps) {
     const baseClass = `
-        group flex items-center gap-2 w-full rounded-md px-2 py-1 cursor-pointer no-underline
+        group flex items-center gap-2 w-full rounded px-2 py-1 cursor-pointer no-underline
         text-sm transition-colors duration-100
         ${danger
             ? `text-[var(--color-red-600)]

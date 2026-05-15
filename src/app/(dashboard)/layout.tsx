@@ -7,24 +7,16 @@ import {
 import { createClient } from "@/lib/server"
 
 const NAV_ITEMS = [
-    { label: "Home",      icon: <HomeIcon />,     url: "/home"      },
-    { label: "New",       icon: <Plus />,         url: "/new"       },
-    { label: "Inbox",     icon: <InboxIcon />,    url: "/inbox"     },
-    { label: "Calendar",  icon: <CalendarIcon />, url: "/calendar"  },
-    { label: "Favorites", icon: <StarIcon />,     url: "/favorites" },
-]
-
-const LIBRARY_ITEMS = [
-    { label: "Documents",     url: "/documents"     },
-    { label: "Projects",      url: "/projects"      },
-    { label: "Profile",       url: "/profile"       },
-    { label: "Notifications", url: "/notifications" },
-    { label: "test",          url: "/test"          },
+    { label: "Home", icon: <HomeIcon />, url: "/home"},
+    { label: "New", icon: <Plus />, url: "/new"},
+    { label: "Inbox", icon: <InboxIcon />, url: "/inbox"},
+    { label: "Calendar", icon: <CalendarIcon />, url: "/calendar"},
+    { label: "Favorites", icon: <StarIcon />, url: "/favorites"},
 ]
 
 const EXTRA_ITEMS = [
     { label: "Settings", icon: <Settings />, url: "/settings/general" },
-    { label: "Trash",    icon: <Trash />,    url: "/trash", danger: true },
+    { label: "Trash", icon: <Trash />, url: "/trash", danger: true },
 ]
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -50,8 +42,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <SidebarProvider>
             <div className="flex h-screen overflow-hidden">
                 <Sidebar
+                    user={user}
                     navItems={NAV_ITEMS}
-                    libraryItems={[...LIBRARY_ITEMS, ...meetingItems]}
+                    libraryItems={[...meetingItems]}
                     extraItems={EXTRA_ITEMS}
                 />
                 <div className="flex flex-col flex-1 min-w-0">

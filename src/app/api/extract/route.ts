@@ -32,7 +32,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'transcript is required' }, { status: 400 })
   }
 
-  // Guard: if tasks already exist for this meeting, skip extraction entirely
   if (meeting_id) {
     const { count } = await supabase
       .from('tasks')
@@ -99,11 +98,9 @@ export async function POST(request: Request) {
     .select()
 
   if (error) {
-    // Table doesn't exist yet
     if (error.code === '42P01') {
       return NextResponse.json({ tasks, warning: 'tasks table does not exist yet' }, { status: 200 })
     }
-    // Unique constraint violation — tasks already inserted (race condition), return existing
     if (error.code === '23505') {
       const { data: existing } = await supabase
         .from('tasks')

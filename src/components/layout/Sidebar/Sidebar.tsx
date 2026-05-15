@@ -23,6 +23,7 @@ interface NavItem {
 }
 
 interface SidebarProps {
+    user?: User | null
     navItems?: NavItem[]
     libraryItems?: NavItem[]
     extraItems?: NavItem[]
@@ -35,10 +36,9 @@ interface NotionConnection {
     lastSynced?: Date
 }
 
-export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarProps) {
+export default function Sidebar({ user, navItems, libraryItems, extraItems }: SidebarProps) {
     const { isOpen, isHovered } = useSidebar()
     const [isPeeking, setIsPeeking] = useState(false)
-    const [user, setUser] = useState<User | null>(null)
     const [userLoading, setUserLoading] = useState(true)
     const pathname = usePathname()
 
@@ -51,10 +51,6 @@ export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarP
 
     useEffect(() => {
         const load = async () => {
-            const supabase = createClient()
-            const { data: { user } } = await supabase.auth.getUser()
-            setUser(user)
-
             const integrations = await fetchIntegrations()
             const notionRow = integrations.find(i => i.provider === "notion")
             setNotion(notionRow ?? undefined)
@@ -145,7 +141,7 @@ export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarP
                 <div className="w-full flex flex-col overflow-y-auto gap-4 px-[8px]">
                     {[
                         { items: navItems },
-                        { items: libraryItems, onMore: true },
+                        { items: libraryItems, onMore: true, emptyState: true },
                         { items: extraItems },
                     ].map((section, i) => (
                         section.items?.length ? (
@@ -160,6 +156,12 @@ export default function Sidebar({ navItems, libraryItems, extraItems }: SidebarP
                                         })}
                                     />
                                 ))}
+                            </div>
+                        ) : section.emptyState ? (
+                            <div key={i} className="flex flex-col gap-[1px] px-2">
+                                <p className="text-xs py-2 text-center" style={{ color: 'var(--color-text-tertiary)' }}>
+                                    Your meetings will show up here.
+                                </p>
                             </div>
                         ) : null
                     ))}

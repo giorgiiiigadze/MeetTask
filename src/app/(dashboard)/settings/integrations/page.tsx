@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/client"
 import { SiNotion, SiLinear } from "react-icons/si"
 import { RefreshCw, PlugZap, Unplug } from "lucide-react"
 import { ConfirmDialog } from "@/src/components/ui/ConfrimDialog"
