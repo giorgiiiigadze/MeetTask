@@ -3,7 +3,7 @@ import { StreamingTranscriber } from "assemblyai"
 
 export type Turn = {
     text: string
-    elapsed: number  // seconds from start
+    elapsed: number
 }
 
 export function useLiveTranscription() {

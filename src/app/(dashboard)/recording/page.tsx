@@ -43,7 +43,6 @@ export default function RecordingPage() {
     return (
         <div className="flex flex-col h-full">
 
-            {/* Header */}
             <div
                 className="flex items-center gap-3 px-6 py-4 shrink-0"
                 style={{ borderBottom: '1px solid var(--color-border-primary)' }}
@@ -86,7 +85,6 @@ export default function RecordingPage() {
                 )}
             </div>
 
-            {/* Transcript area */}
             <div className="flex-1 overflow-y-auto">
                 {phase === 'idle' ? (
                     <div className="flex flex-col items-center justify-center h-full gap-4 px-8 text-center">
@@ -195,7 +193,6 @@ export default function RecordingPage() {
                 )}
             </div>
 
-            {/* Controls bar */}
             <div
                 className="shrink-0 px-6 py-6 flex flex-col items-center gap-4"
                 style={{ borderTop: '1px solid var(--color-border-primary)' }}

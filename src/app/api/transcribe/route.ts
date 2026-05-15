@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   }
 
   const { data, error } = await supabase
-    .from('transcripts')
+    .from('transcriptions')
     .insert({
       user_id: user.id,
       content,
