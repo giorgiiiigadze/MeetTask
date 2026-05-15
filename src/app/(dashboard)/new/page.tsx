@@ -76,32 +76,7 @@ export default function NewPage() {
         className="flex-1 flex items-center justify-center px-8"
         onClick={() => titleRef.current?.focus()}
       >
-        <h1
-          ref={titleRef}
-          contentEditable
-          suppressContentEditableWarning
-          spellCheck
-          role="textbox"
-          aria-multiline="true"
-          aria-roledescription="page title"
-          style={{
-            maxWidth: '100%',
-            width: '100%',
-            whiteSpace: 'break-spaces',
-            wordBreak: 'break-word',
-            caretColor: 'var(--color-text-primary)',
-            padding: '0 8px',
-            fontSize: '1em',
-            fontWeight: 'inherit',
-            margin: 0,
-            cursor: 'text',
-            minHeight: '1em',
-            color: 'var(--color-text-primary)',
-            outline: 'none',
-          }}
-        >
-          New page
-        </h1>
+        
       </div>
 
       {/* File upload panel */}

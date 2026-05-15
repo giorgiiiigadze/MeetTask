@@ -1,13 +1,32 @@
 import { NextResponse } from 'next/server'
 import { AssemblyAI } from 'assemblyai'
-import { createClient } from '@/lib/server'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 const ACCEPTED = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/webm', 'audio/x-m4a', 'video/mp4', 'video/webm']
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const cookieStore = await cookies()
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll() },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options)
+          )
+        },
+      },
+    }
+  )
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const formData = await request.formData()
   const file = formData.get('file') as File | null
@@ -30,17 +49,20 @@ export async function POST(request: Request) {
   }
 
   const { data, error } = await supabase
-    .from('transcripts')
+    .from('meetings')                          // ✅ correct table
     .insert({
       user_id: user.id,
       title,
-      source: 'upload',
-      metadata: { assemblyai_id: aaiTranscript.id, status: 'processing' },
+      audio_url: aaiTranscript.id,            // ✅ store AssemblyAI job ID here
+      status: 'processing',                   // ✅ valid status
     })
     .select('id')
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('Supabase insert failed:', error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
 
   return NextResponse.json({ meetingId: data.id }, { status: 201 })
 }
