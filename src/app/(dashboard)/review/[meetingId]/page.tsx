@@ -73,7 +73,7 @@ export default function ReviewPage() {
     </div>
   )
 
-  const done = tasks.filter(t => t.status === 'done').length
+  const done = tasks.filter(t => t.status === 'completed').length
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-8 flex flex-col gap-6">

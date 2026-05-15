@@ -58,7 +58,11 @@ export default function NewPage() {
   }
 
   const QUICK_ACTIONS = [
-    { label: 'AI Meeting Notes', icon: <Mic size={14} /> },
+    {
+      label: 'AI Meeting Notes',
+      icon: <Mic size={14} />,
+      onClick: () => router.push('/recording'),
+    },
     {
       label: 'Upload Recording',
       icon: <Upload size={14} />,

@@ -481,6 +481,15 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@keyframes audio-bar-pulse {
+  0%, 100% { transform: scaleY(0.25); }
+  50%       { transform: scaleY(1); }
+}
+.audio-bar {
+  animation: audio-bar-pulse 0.9s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
 *,
 *::before,
 *::after {

@@ -12,7 +12,7 @@ export async function GET() {
         }
 
         const client = new AssemblyAI({ apiKey: process.env.ASSEMBLYAI_API_KEY! })
-        const token = await client.streaming.createTemporaryToken({ expires_in_seconds: 60 })
+        const token = await client.streaming.createTemporaryToken({ expires_in_seconds: 3600 })
         return NextResponse.json({ token })
     } catch (err) {
         console.error("Token route error:", err)
